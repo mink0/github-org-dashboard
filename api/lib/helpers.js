@@ -58,9 +58,7 @@ function getDs(date) {
 }
 
 function get(obj, path, defaultValue) {
-  return path
-    .split('.')
-    .reduce((a, c) => (a && a[c] ? a[c] : defaultValue || null), obj)
+  return path.split('.').reduce((a, c) => (a && a[c] ? a[c] : defaultValue || null), obj)
 }
 
 function formatBytes(bytes, decimals) {

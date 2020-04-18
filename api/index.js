@@ -8,8 +8,9 @@ import express from 'express'
 import { log } from './lib/helpers'
 import github from './lib/github'
 import runJobs from './async_jobs'
-import sse from './sse'
-import repos from './repos'
+import sse from './routes/sse'
+import repos from './routes/repos'
+import users from './routes/users'
 
 const app = express()
 
@@ -19,6 +20,7 @@ const app = express()
 
 app.get('/repos', repos.getAll)
 app.get('/repos/:id', repos.getById)
+app.get('/users', users)
 app.get('/sse', sse)
 
 //

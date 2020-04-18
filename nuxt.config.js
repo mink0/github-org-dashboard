@@ -66,6 +66,16 @@ export default {
      */
     extend(config, ctx) {}
   },
+  env: {
+    org: process.env.GITHUB_ORG
+  },
+  render: {
+    // FIXME:
+    // Nuxt 2.12 causes net::ERR_INCOMPLETE_CHUNKED_ENCODING error for SSE in production mode.
+    // Workaround is to disable gzip and `Vary: Accept-Encoding` header,
+    // by disabling server-side compression
+    compressor: false
+  },
   // Express server is used as serverMiddleware
   serverMiddleware: [{ path: apiPrefix, handler: '~/api' }]
 }

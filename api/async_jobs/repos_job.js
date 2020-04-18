@@ -13,6 +13,7 @@ async function fetchRepos(ctx) {
       remaining
       resetAt
     }
+
     organization(login: $owner) {
       avatarUrl
       repositories(first: $first) {
@@ -28,6 +29,7 @@ async function fetchRepos(ctx) {
       remaining
       resetAt
     }
+
     organization(login: $owner) {
       repositories(first: $first, privacy: PUBLIC){
         totalCount

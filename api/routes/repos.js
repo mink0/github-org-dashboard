@@ -1,12 +1,12 @@
 import Debug from 'debug'
 import get from 'lodash.get'
-import { formatBytes, getDs, truncStr, userUrl } from './lib/helpers'
-
-const debug = Debug('api:repos:list')
+import { formatBytes, getDs, truncStr, userUrl } from '../lib/helpers'
 
 export default { getAll, getById }
 
 async function getAll(req, res, next) {
+  const debug = Debug('api:repos:all')
+
   const reposGql = `query repos(
     $queryString: String!,
     $first: Int,
@@ -137,6 +137,8 @@ async function getAll(req, res, next) {
 }
 
 async function getById(req, res, next) {
+  const debug = Debug('api:repos:id')
+
   const repoInfoGql = `query repoInfo($id: ID!, $first: Int) {
     rateLimit {
       cost
@@ -218,7 +220,6 @@ async function getById(req, res, next) {
   } catch (err) {
     return next(err)
   }
-
   debug('result:', data)
 
   const prTable = get(data, 'node.pullRequests.edges', []).map((e) => ({

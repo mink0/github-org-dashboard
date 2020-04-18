@@ -1,7 +1,6 @@
 export const state = () => ({
-  sse: {
-    url: '/api/sse'
-  },
+  apiUrl: '/api',
+
   repos: {
     totalCount: '-',
     totalDiskUsage: '-',

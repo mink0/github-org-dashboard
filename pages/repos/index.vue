@@ -1,6 +1,5 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-
   <div class="animated fadeIn">
     <b-row>
       <b-col md="4">
@@ -149,83 +148,6 @@
 import { mapState } from 'vuex'
 import debounce from 'lodash.debounce'
 
-async function getAll(filter, cursor, reverse) {
-  if (this.reposCancel) {
-    this.reposCancel.cancel('Previous fetchRepos request was canceled by user')
-  }
-
-  this.reposCancel = this.$axios.CancelToken.source()
-
-  const res = await this.$axios
-    .$get('/api/repos', {
-      cancelToken: this.reposCancel.token,
-      params: {
-        q: filter,
-        cur: cursor,
-        rev: reverse
-      }
-    })
-    .catch((err) => {
-      if (this.$axios.isCancel(err)) {
-        // eslint-disable-next-line no-console
-        console.error('Request canceled', err)
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(err)
-      }
-    })
-
-  return res || {}
-}
-
-async function getRepoRow(row) {
-  if (row.detailsShowing) {
-    row.toggleDetails()
-    return
-  }
-
-  const { id } = row.item
-
-  row.item.loading = true
-  const data = await this.$axios.$get(`/api/repos/${id}`)
-
-  row.item.commitsTable = data.commitsTable
-  row.item.topContribTable = data.topContribTable
-  row.item.prTable = data.prTable
-  row.item.colTable = data.colTable
-
-  row.item.loading = false
-  row.toggleDetails()
-}
-
-async function getRepos(filter, page) {
-  this.reposIsBusy = true
-
-  let cursor
-  let reverse
-  if (page) {
-    if (page === -1) {
-      reverse = true
-      cursor = this.reposTableStartCursor
-    } else if (page === 1) {
-      cursor = this.reposTableEndCursor
-    }
-  }
-
-  const data = await this.getAll(filter, cursor, reverse)
-
-  this.reposTable = data.table
-
-  this.reposTableTotalRows = data.pagination.total
-  this.reposTablePerPage = data.pagination.repoPerPage
-  this.reposTableStartCursor = data.pagination.startCursor
-  this.reposTableEndCursor = data.pagination.endCursor
-
-  this.pagination = data.pagination
-
-  this.reposIsBusy = false
-}
-
 export default {
   data() {
     return {
@@ -287,10 +209,87 @@ export default {
   },
 
   methods: {
-    getAll,
+    fetchRepos,
     getRepos,
     getRepoRow,
     getReposThrottled: debounce(getRepos, 700)
   }
+}
+
+async function fetchRepos(filter, cursor, reverse) {
+  if (this.reposCancel) {
+    this.reposCancel.cancel('Previous fetchRepos request was canceled by user')
+  }
+
+  const url = this.$store.state.apiUrl
+  this.reposCancel = this.$axios.CancelToken.source()
+  const res = await this.$axios
+    .$get(`${url}/repos`, {
+      cancelToken: this.reposCancel.token,
+      params: {
+        q: filter,
+        cur: cursor,
+        rev: reverse
+      }
+    })
+    .catch((err) => {
+      if (this.$axios.isCancel(err)) {
+        // eslint-disable-next-line no-console
+        console.error('Request canceled', err)
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
+    })
+
+  return res || null
+}
+
+async function getRepoRow(row) {
+  if (row.detailsShowing) {
+    row.toggleDetails()
+    return
+  }
+
+  const { id } = row.item
+
+  row.item.loading = true
+  const data = await this.$axios.$get(`/api/repos/${id}`)
+
+  row.item.commitsTable = data.commitsTable
+  row.item.topContribTable = data.topContribTable
+  row.item.prTable = data.prTable
+  row.item.colTable = data.colTable
+
+  row.item.loading = false
+  row.toggleDetails()
+}
+
+async function getRepos(filter, page) {
+  let cursor
+  let reverse
+  if (page) {
+    if (page === -1) {
+      reverse = true
+      cursor = this.reposTableStartCursor
+    } else if (page === 1) {
+      cursor = this.reposTableEndCursor
+    }
+  }
+
+  this.reposIsBusy = true
+  const data = await this.fetchRepos(filter, cursor, reverse)
+  this.reposIsBusy = false
+
+  if (!data) return
+
+  this.reposTable = data.table
+
+  this.reposTableTotalRows = data.pagination.total
+  this.reposTablePerPage = data.pagination.repoPerPage
+  this.reposTableStartCursor = data.pagination.startCursor
+  this.reposTableEndCursor = data.pagination.endCursor
+
+  this.pagination = data.pagination
 }
 </script>

@@ -44,9 +44,10 @@ function sseStream(store) {
       eSrc.close()
     }
 
+    const url = `${store.state.apiUrl}/sse`
     // eslint-disable-next-line no-console
-    console.log(`SSE: Connecting to ${store.state.sse.url}`)
-    eSrc = new EventSource(store.state.sse.url)
+    console.log(`SSE: Connecting to ${url}`)
+    eSrc = new EventSource(url)
 
     eSrc.addEventListener('event', (event) => eSrcEventHandler(event), false)
     eSrc.addEventListener('error', (event) => eSrcErrorHandler(event), false)
