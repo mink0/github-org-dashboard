@@ -1,7 +1,7 @@
 {
-  "name": "github-dashboard",
+  "name": "github-org-dashboard",
   "version": "0.1.0",
-  "description": "Github Org Dashboard made with Nuxt",
+  "description": "Github organizations dashboard",
   "author": "mink0",
   "private": true,
   "scripts": {
