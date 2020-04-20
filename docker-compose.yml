@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  dashboard:
+    build: .
+    environment:
+      PORT: 3000
+      GITHUB_ORG: ${GITHUB_ORG}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    ports:
+      - "3000:3000"
