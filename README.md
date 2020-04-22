@@ -7,7 +7,7 @@ Mockup was made with [Nuxt.js](https://nuxtjs.org/) framework.
 ## Technology stack
 
 - [Server Side Rendering (SSR)](https://nuxtjs.org/guide/#server-rendered-universal-ssr-) by [Nuxt.js](https://nuxtjs.org/)
-- [Server-Sent Events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) for realtime data stream from server
+- [Server-Sent Events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) 
 - [Github Graphql API](https://developer.github.com/v4/) using [octokit/graphql.js](https://github.com/octokit/graphql.js)
 
 ## Setup
